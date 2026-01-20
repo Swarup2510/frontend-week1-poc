@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import "./index.css";
+import TodoInput from "./components/TodoInput";
+import TodoList from "./components/TodoList";
 
 function App() {
   const [todo, setTodo] = useState("");
@@ -7,7 +9,6 @@ function App() {
 
   useEffect(() => {
     console.log("Todo App Loaded");
-
     const savedTodos = JSON.parse(localStorage.getItem("todos"));
     if (savedTodos) {
       setTodos(savedTodos);
@@ -20,62 +21,35 @@ function App() {
 
   const addTodo = () => {
     if (todo.trim() === "") return;
-
     setTodos([...todos, { text: todo, completed: false }]);
     setTodo("");
+  };
+
+  const toggleTodo = (index) => {
+    const newTodos = [...todos];
+    newTodos[index].completed = !newTodos[index].completed;
+    setTodos(newTodos);
+  };
+
+  const deleteTodo = (index) => {
+    setTodos(todos.filter((_, i) => i !== index));
   };
 
   return (
     <div className="app">
       <h1>My Todo App</h1>
 
-      {/* Input Section */}
-      <input
-        type="text"
-        placeholder="Enter a todo"
-        value={todo}
-        onChange={(e) => setTodo(e.target.value)}
+      <TodoInput
+        todo={todo}
+        setTodo={setTodo}
+        addTodo={addTodo}
       />
 
-      <button onClick={addTodo}>Add</button>
-
-      {/* Todo List */}
-      {todos.length === 0 ? (
-        <p>No items available</p>
-      ) : (
-        <ul>
-          {todos.map((item, index) => (
-            <li key={index}>
-              <input
-                type="checkbox"
-                checked={item.completed}
-                onChange={() => {
-                  const newTodos = [...todos];
-                  newTodos[index].completed = !newTodos[index].completed;
-                  setTodos(newTodos);
-                }}
-              />
-
-              <span
-                style={{
-                  textDecoration: item.completed ? "line-through" : "none",
-                  color: item.completed ? "#888" : "#000",
-                }}
-              >
-                {item.text}
-              </span>
-
-              <button
-                onClick={() =>
-                  setTodos(todos.filter((_, i) => i !== index))
-                }
-              >
-                ❌
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+      <TodoList
+        todos={todos}
+        toggleTodo={toggleTodo}
+        deleteTodo={deleteTodo}
+      />
     </div>
   );
 }
