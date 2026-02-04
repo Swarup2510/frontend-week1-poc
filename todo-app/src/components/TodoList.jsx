@@ -1,7 +1,12 @@
 import TodoItem from "./TodoItem";
+import { useSelector, useDispatch } from 'react-redux'
+import { toggleTodoRequest, deleteTodoRequest } from '../store/todos/slice'
 
-function TodoList({ todos, toggleTodo, deleteTodo }) {
-  if (todos.length === 0) {
+function TodoList() {
+  const todos = useSelector(state => state.todos.todos)
+  const dispatch = useDispatch()
+
+  if (!todos || todos.length === 0) {
     return <p>No items available</p>;
   }
 
@@ -12,8 +17,8 @@ function TodoList({ todos, toggleTodo, deleteTodo }) {
           key={index}
           item={item}
           index={index}
-          toggleTodo={toggleTodo}
-          deleteTodo={deleteTodo}
+          toggleTodo={() => dispatch(toggleTodoRequest(index))}
+          deleteTodo={() => dispatch(deleteTodoRequest(index))}
         />
       ))}
     </ul>
