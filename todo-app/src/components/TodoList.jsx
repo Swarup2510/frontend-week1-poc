@@ -7,11 +7,11 @@ function TodoList() {
   const dispatch = useDispatch()
 
   if (!todos || todos.length === 0) {
-    return <p>No items available</p>;
+    return <p className="empty-state">No items available</p>;
   }
 
   return (
-    <ul>
+    <ul className="todo-list">
       {todos.map((item, index) => (
         <TodoItem
           key={index}

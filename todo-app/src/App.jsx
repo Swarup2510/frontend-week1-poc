@@ -1,25 +1,18 @@
-import { useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import "./index.css";
-import TodoInput from "./components/TodoInput";
-import TodoList from "./components/TodoList";
-import { useDispatch } from 'react-redux'
-import { loadTodosRequest } from './store/todos/slice'
+import Navigation from "./components/Navigation";
+import Todo from "./pages/Todo";
+import Users from "./pages/Users";
 
 function App() {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(loadTodosRequest())
-  }, [dispatch]);
-
   return (
-    <div className="app">
-      <h1>My Todo App</h1>
-
-      <TodoInput />
-
-      <TodoList />
-    </div>
+    <Router>
+      <Navigation />
+      <Routes>
+        <Route path="/" element={<Todo />} />
+        <Route path="/users" element={<Users />} />
+      </Routes>
+    </Router>
   );
 }
 
